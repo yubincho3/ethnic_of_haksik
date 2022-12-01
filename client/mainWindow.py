@@ -14,9 +14,8 @@ TIME_BUTTON_SIZE = (95, 25)
 SHOW_BUTTON_SIZE = (100, 40)
 BUTTON_SIZE = (50, 20)
 
-async def temp(lst, obj):
-    lst[0] = await obj.websock.recv()
-SERVER_IP = 'ws://127.0.0.1:26656'
+# SERVER_IP = 'ws://127.0.0.1/26656'
+SERVER_IP = 'wss://ethnic-of-haksik.herokuapp.com/'
 
 # 메인 윈도우 클래스
 class EthnicOfHaksik(QWidget):
