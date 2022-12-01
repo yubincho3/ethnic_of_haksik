@@ -11,13 +11,13 @@ class WebsocketClient:
         self.__loop.stop()
 
     async def __connect(self, url: str):
-        self.__websock = await websockets.connect(url) # type: ignore
+        self.__websock = await websockets.connect(url)
 
     async def __recv(self):
         self.__packet = await self.__websock.recv()
 
     async def __send(self, packet):
-        await self.__websock.send(packet) # type: ignore
+        await self.__websock.send(packet)
 
     def sendString(self, string):
         future = self.__send(string)
