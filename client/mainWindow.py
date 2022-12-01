@@ -1,39 +1,39 @@
-# --- PyQt5 모듈 --- #
 from PyQt5.QtWidgets import (
     QWidget, QGridLayout, QHBoxLayout, QVBoxLayout,
     QLineEdit, QTextEdit, QLabel, QPushButton
 )
 from PyQt5.QtCore import Qt
 
-# --- 네트워크 모듈 --- #
-from tcpClient import TcpClient
+import json
 
-# --- 요일 enum class 모듈 --- #
+from websocketClient import WebsocketClient
+
 from weekday import *
 
-TIME_BUTTON_SIZE = (75, 20)
+TIME_BUTTON_SIZE = (95, 25)
 SHOW_BUTTON_SIZE = (100, 40)
 BUTTON_SIZE = (50, 20)
 
-# 서버 IP 주소는 따로 변경해야 합니다.
-SERVER_IP = '127.0.0.1'
+async def temp(lst, obj):
+    lst[0] = await obj.websock.recv() #type:ignore
+SERVER_IP = 'ws://127.0.0.1:26656'
 
 # 메인 윈도우 클래스
 class EthnicOfHaksik(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent = None):
         super().__init__(parent)
-        self.server = TcpClient(SERVER_IP)
         self.__initializeUserInterface()
+        self.server = WebsocketClient(SERVER_IP)
 
     # UI를 생성하고 초기화 합니다.
     def __initializeUserInterface(self):
         self.setWindowTitle('학식의 민족')
 
-        # 시간표 테이블 구역(왼쪽) 레이아웃
+        # 시간표 테이블 구역 레이아웃
         tableLayout = QGridLayout()
 
         # 요일 추가
-        for i in range(len(weekdays)):
+        for i in range(len(weekdays) - 1):
             box = QLineEdit()
             box.setReadOnly(True)
             box.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -56,7 +56,7 @@ class EthnicOfHaksik(QWidget):
             tableLayout.addWidget(box, i - 8, 0)
 
             # 토글 버튼 추가
-            for j in range(7):
+            for j in range(6):
                 button = QPushButton()
                 button.setFixedSize(*BUTTON_SIZE)
                 button.setCheckable(True)
@@ -111,9 +111,10 @@ class EthnicOfHaksik(QWidget):
             if self.buttons[i - 18][today.value].isChecked():
                 continue
 
-            unableTimes.append((30 * i // 60, 30 * (i % 2)))
+            unableTimes.append([30 * i // 60, 30 * (i % 2)])
 
-        self.server.sendData(unableTimes)
+        jsonString = json.dumps(unableTimes)
+        self.server.sendString(jsonString)
 
-        resultText = self.server.getData()
+        resultText = self.server.getString()
         self.resultBox.setText(resultText)
