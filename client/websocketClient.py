@@ -1,11 +1,14 @@
 import websockets
 import asyncio
-import json
 
 class WebsocketClient:
     def __init__(self, url: str):
         self.__loop = asyncio.new_event_loop()
         self.__loop.run_until_complete(self.__connect(url))
+
+    def __del__(self):
+        self.__loop.run_until_complete(self.__websock.close())
+        self.__loop.stop()
 
     async def __connect(self, url: str):
         self.__websock = await websockets.connect(url) # type: ignore

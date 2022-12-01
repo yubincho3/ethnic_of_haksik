@@ -117,4 +117,4 @@ class EthnicOfHaksik(QWidget):
         self.server.sendString(jsonString)
 
         resultText = self.server.getString()
-        self.resultBox.setText(resultText)
+        self.resultBox.setMarkdown(resultText)

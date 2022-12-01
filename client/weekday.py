@@ -1,4 +1,5 @@
 from datetime import datetime
+from pytz import timezone
 import enum
 
 class Weekday(enum.Enum):
@@ -12,4 +13,5 @@ class Weekday(enum.Enum):
 weekdays = [*Weekday]
 
 def getTodayWeekday():
-    return weekdays[datetime.today().weekday()]
+    weekday = datetime.now(timezone('Asia/seoul')).weekday()
+    return weekdays[weekday]
