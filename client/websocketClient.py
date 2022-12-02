@@ -1,6 +1,7 @@
 import websockets
 import asyncio
 
+# 비동기 호출이 필요한 웹소켓 객체를 동기 호출하기 위한 클래스입니다.
 class WebsocketClient:
     def __init__(self, url: str):
         self.__loop = asyncio.new_event_loop()
@@ -8,7 +9,8 @@ class WebsocketClient:
 
     # 웹소켓 연결을 종료하고 이벤트 루프를 닫습니다.
     def __del__(self):
-        self.__loop.run_until_complete(self.__websock.close())
+        if not self.__websock.closed():
+            self.__loop.run_until_complete(self.__websock.close())
         self.__loop.stop()
 
     # 서버와 연결합니다.
