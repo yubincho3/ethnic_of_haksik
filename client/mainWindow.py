@@ -1,10 +1,11 @@
 from PyQt5.QtWidgets import (
     QWidget, QGridLayout, QHBoxLayout, QVBoxLayout,
-    QLineEdit, QTextEdit, QLabel, QPushButton
+    QMessageBox, QLineEdit, QTextEdit, QLabel, QPushButton
 )
 from PyQt5.QtCore import Qt
 
 import json
+import sys
 
 from websocketClient import WebsocketClient
 
@@ -22,7 +23,15 @@ class EthnicOfHaksik(QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
         self.__initializeUserInterface()
-        self.server = WebsocketClient(SERVER_IP)
+
+        try:
+            self.server = WebsocketClient(SERVER_IP)
+        except Exception:
+            QMessageBox.question(
+                self, '학식의민족', '서버와 연결할 수 없습니다',
+                QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.Yes
+            )
+            sys.exit(0)
 
     # UI를 생성하고 초기화 합니다.
     def __initializeUserInterface(self):
@@ -111,9 +120,15 @@ class EthnicOfHaksik(QWidget):
                 continue
 
             unableTimes.append([30 * i // 60, 30 * (i % 2)])
-
         jsonString = json.dumps(unableTimes)
-        self.server.sendString(jsonString)
 
-        resultText = self.server.getString()
-        self.resultBox.setMarkdown(resultText)
+        try:
+            self.server.sendString(jsonString)
+            resultText = self.server.getString()
+            self.resultBox.setMarkdown(resultText)
+        except Exception:
+            QMessageBox.question(
+                self, '학식의민족', '서버와 연결할 수 없습니다',
+                QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.Yes
+            )
+            sys.exit(0)
