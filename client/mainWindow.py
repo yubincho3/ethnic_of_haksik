@@ -26,8 +26,7 @@ class EthnicOfHaksik(QWidget):
 
         try:
             self.server = WebsocketClient(SERVER_IP)
-        except Exception as e:
-            input(e)
+        except:
             QMessageBox.question(
                 self, '학식의 민족', '서버와 연결할 수 없습니다',
                 QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.Yes
@@ -127,7 +126,7 @@ class EthnicOfHaksik(QWidget):
             self.server.sendString(jsonString)
             resultText = self.server.getString()
             self.resultBox.setMarkdown(resultText)
-        except Exception:
+        except:
             QMessageBox.question(
                 self, '학식의 민족', '서버와 연결할 수 없습니다',
                 QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.Yes
