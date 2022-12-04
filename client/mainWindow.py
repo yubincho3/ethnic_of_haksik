@@ -15,8 +15,8 @@ TIME_BUTTON_SIZE = (95, 25)
 SHOW_BUTTON_SIZE = (100, 40)
 BUTTON_SIZE = (50, 20)
 
-SERVER_IP = 'ws://127.0.0.1:26656'
-# SERVER_IP = 'wss://ethnic-of-haksik.herokuapp.com/'
+# SERVER_IP = 'ws://127.0.0.1:26656'
+SERVER_IP = 'wss://ethnic-of-haksik.herokuapp.com/'
 
 # 메인 윈도우 클래스
 class EthnicOfHaksik(QWidget):
@@ -26,7 +26,8 @@ class EthnicOfHaksik(QWidget):
 
         try:
             self.server = WebsocketClient(SERVER_IP)
-        except Exception:
+        except Exception as e:
+            input(e)
             QMessageBox.question(
                 self, '학식의 민족', '서버와 연결할 수 없습니다',
                 QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.Yes
