@@ -27,7 +27,7 @@ class WebsocketClient:
         await self.__websock.send(packet)
 
     # 문자열을 전송합니다.
-    def sendString(self, string):
+    def sendString(self, string: str):
         try:
             future = self.__send(string)
             self.__loop.run_until_complete(future)

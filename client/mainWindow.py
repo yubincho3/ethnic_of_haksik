@@ -28,7 +28,7 @@ class EthnicOfHaksik(QWidget):
             self.server = WebsocketClient(SERVER_IP)
         except Exception:
             QMessageBox.question(
-                self, '학식의민족', '서버와 연결할 수 없습니다',
+                self, '학식의 민족', '서버와 연결할 수 없습니다',
                 QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.Yes
             )
             sys.exit(0)
@@ -41,7 +41,7 @@ class EthnicOfHaksik(QWidget):
         tableLayout = QGridLayout()
 
         # 요일 추가
-        for i in range(len(weekdays) - 1):
+        for i in range(len(weekdays)):
             box = QLineEdit()
             box.setReadOnly(True)
             box.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -64,7 +64,7 @@ class EthnicOfHaksik(QWidget):
             tableLayout.addWidget(box, i - 8, 0)
 
             # 토글 버튼 추가
-            for j in range(6):
+            for j in range(7):
                 button = QPushButton()
                 button.setFixedSize(*BUTTON_SIZE)
                 button.setCheckable(True)
@@ -128,7 +128,7 @@ class EthnicOfHaksik(QWidget):
             self.resultBox.setMarkdown(resultText)
         except Exception:
             QMessageBox.question(
-                self, '학식의민족', '서버와 연결할 수 없습니다',
+                self, '학식의 민족', '서버와 연결할 수 없습니다',
                 QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.Yes
             )
             sys.exit(0)
