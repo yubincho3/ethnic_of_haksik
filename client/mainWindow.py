@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
+from qasync import asyncSlot
+
 import json
 import sys
 
@@ -15,8 +17,8 @@ TIME_BUTTON_SIZE = (95, 25)
 SHOW_BUTTON_SIZE = (100, 40)
 BUTTON_SIZE = (50, 20)
 
-# SERVER_IP = 'ws://127.0.0.1:26656'
-SERVER_IP = 'wss://ethnic-of-haksik.herokuapp.com/'
+# SERVER_URL = 'ws://127.0.0.1:26656'
+SERVER_URL = 'wss://ethnic-of-haksik.herokuapp.com/'
 
 # 메인 윈도우 클래스
 class EthnicOfHaksik(QWidget):
@@ -25,7 +27,7 @@ class EthnicOfHaksik(QWidget):
         self.__initializeUserInterface()
 
         try:
-            self.server = WebsocketClient(SERVER_IP)
+            self.server = WebsocketClient(SERVER_URL)
         except:
             QMessageBox.question(
                 self, '학식의 민족', '서버와 연결할 수 없습니다',
@@ -110,8 +112,9 @@ class EthnicOfHaksik(QWidget):
         if isinstance(button, QPushButton):
             button.setStyleSheet(f"background-color: {['red', 'green'][state]}")
 
+    @asyncSlot()
     # 시간표를 서버에 업로드하고 수신한 결과를 출력합니다.
-    def showClicked(self):
+    async def showClicked(self):
         today = getTodayWeekday()
         unableTimes = []
 
@@ -123,8 +126,8 @@ class EthnicOfHaksik(QWidget):
         jsonString = json.dumps(unableTimes)
 
         try:
-            self.server.sendString(jsonString)
-            resultText = self.server.getString()
+            await self.server.sendString(jsonString)
+            resultText = await self.server.getString()
             self.resultBox.setMarkdown(resultText)
         except:
             QMessageBox.question(
